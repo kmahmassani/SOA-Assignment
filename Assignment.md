@@ -89,6 +89,80 @@ Point Status Service | This service allows the charging points themselves to con
 
 ![Sequence](UML.png)
 
+## Part B
+
+*I have assumed that only it is only required to implement one of the micro-services that the car can communicate with, and have chosen the Charging Point Info Service.*
+
+### 1)
+
+A machine readable OpenApi JSON file is in the appendix
+![Swagger](Swagger.png)
+
+### 2)
+
+```javascript
+const express = require('express')
+const router = express.Router()
+const { ChargingPoints } = require('../models/chargingPoint')
+
+
+//Get All
+router.get('/', async (req, res) => {
+    try {
+        const cp = await ChargingPoints.find()
+        res.json(cp)
+      } catch (err) {
+        res.status(500).json({ message: err.message })
+      }
+})
+
+// Get by ID
+router.get('/:id', async (req, res) => {
+    const id = req.params.id
+
+    if (!id || id == '')
+    {
+        res.status(400).statusMessage('Invalid ID supplied')
+        return;
+    }
+
+    try {
+        const cp = await ChargingPoints.findOne({ cpID: id})
+
+        if (!cp)
+        {
+            res.status(404).statusMessage('Point not found')
+            return;
+        }
+        res.json(cp)
+      } catch (err) {
+        res.status(500).json({ message: err.message })
+      }
+})
+
+module.exports = router
+```
+
+```javascript
+const resolvers = {
+    points: (args, context) => context().then(db => db.collection('chargingpoints').find(),
+    point: (args, context) =>  context().then(db => db.collection('chargingpoints').findOne({ cpID: args.cpId}).toArray())
+  };
+
+app.use('/graphql', graphqlHTTP({
+    schema:ChargingPointQL,
+    rootValue: resolvers,
+    context,
+    graphiql: true
+  }))
+```
+
+### 3)
+
+![Request1](request1.png)
+![Request2](request2.png)
+![Request3](request3.png)
+![Request4](request4.png)
 
 https://martinfowler.com/articles/microservice-trade-offs.html
 https://skelia.com/articles/5-major-benefits-microservice-architecture/

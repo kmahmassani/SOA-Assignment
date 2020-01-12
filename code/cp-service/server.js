@@ -22,7 +22,7 @@ const context = () => MongoClient.connect(process.env.DATABASE_URL, { useNewUrlP
 
 const resolvers = {
     points: (args, context) => context().then(db => db.collection('chargingpoints').find().toArray()),   
-    point: (args, context) =>  context().then(db => db.collection('chargingpoints').findOne({ cpId: args.cpId}).toArray())
+    point: (args, context) =>  context().then(db => db.collection('chargingpoints').findOne({ cpID: args.cpId}))
   };
 
 app.use('/graphql', graphqlHTTP({
