@@ -1,0 +1,171 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the Charging Points Info Service",
+    "version": "1.0.0",
+    "title": "EV Network Charging Points Info Service",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "kmahmassani@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "chargingpoints",
+      "description": "Information about available charging points"
+    },
+    {
+      "name": "graphql",
+      "description": "Access to GraphQL for querying"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/chargingpoints": {
+      "get": {
+        "tags": [
+          "chargingpoints"
+        ],
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "summary": "get all charging points",
+        "description": "",
+        "operationId": "addPet",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/point"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chargingpoints/{cpId}": {
+      "get": {
+        "tags": [
+          "chargingpoints"
+        ],
+        "summary": "Find charging point by ID",
+        "description": "Returns a single charging point",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cpId",
+            "in": "path",
+            "description": "ID of charging point to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/point"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Point not found"
+          }
+        }
+      }
+    },
+    "/graphql": {
+      "get": {
+        "tags": [
+          "graphql"
+        ],
+        "description": "This is the GraphQL endpoint",
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/point"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "point": {
+      "type": "object",
+      "properties": {
+        "cpId": {
+          "type": "string",
+          "example": "TS512"
+        },
+        "name": {
+          "type": "string",
+          "example": "Tesco's Supermarket Charger"
+        },
+        "ownerID": {
+          "type": "string",
+          "example": "SB401"
+        },
+        "cost": {
+          "type": "number",
+          "format": "float",
+          "example": 5.2
+        },
+        "latitude": {
+          "type": "number",
+          "format": "float",
+          "example": 51.7555223
+        },
+        "longitude": {
+          "type": "number",
+          "format": "float",
+          "example": -1.260042
+        },
+        "chargeType": {
+          "type": "string",
+          "description": "Order Status",
+          "enum": [
+            "Tesla Supercharger",
+            "Caravan Mains Socket",
+            "Europlug"
+          ]
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}

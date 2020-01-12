@@ -5,7 +5,7 @@
 ### 1)
 
 ![ArchitectureDiagram](SOAArchDiagram.png)
-*for eligibility, the communication of all the services with the Identity microservice has been ommitted*
+*for eligibility, the communication of all the services with the Identity micro-service has been omitted*
 
 ### 2)
 
@@ -22,13 +22,13 @@ Once drivers arrive to the charging point and plug-in, their car would contact t
 #### Justification
 
 
-The system has been designed with a microservices approach with the aim of striking a balance between the size and number of services.  
+The system has been designed with a micro-services approach with the aim of striking a balance between the size and number of services.  
 
 This allows the following benefits:
 
 * **Easier to build and maintain**
 
-  The system becomes eaiser to build and maintain as it is split into smaller microservices.  Each microservice is an independant, so a services can be coded in a different language and use different databases without any affect on the other services.  The individual services can also be deployed, swapped out and/or managed independently of the other services, each one can be allocated resources suited to it's requirements.  If one service fails, it should not affect the rest of the system, and should be easily replaced/restarted.
+  The system becomes easier to build and maintain as it is split into smaller micro-services.  Each micro-service is an independent, so a services can be coded in a different language and use different databases without any affect on the other services.  The individual services can also be deployed, swapped out and/or managed independently of the other services, each one can be allocated resources suited to it's requirements.  If one service fails, it should not affect the rest of the system, and should be easily replaced/restarted.
 
 * **Improved Productivity**
 
@@ -36,13 +36,13 @@ This allows the following benefits:
 
 * **Flexibility and Scalability**
 
-  Because each service can use it's own tech stack, it can choose the best one for it's specific needs, and due to the fact that each service is decoupled from the rest, new services can be added to the system or existing ones scaled with relative ease.  This also allows experimentation, as a microservice written in one language can easily be replaced by another rewritten in a different language as compared to rewriting a whole monolithic application.
+  Because each service can use it's own tech stack, it can choose the best one for it's specific needs, and due to the fact that each service is decoupled from the rest, new services can be added to the system or existing ones scaled with relative ease.  This also allows experimentation, as a micro-service written in one language can easily be replaced by another rewritten in a different language as compared to rewriting a whole monolithic application.
 
 There is a price to pay however, that must be managed:
 
 * **Cost of entry**
 
-  Because the microservices become a distributed system, the code inherit some complexities.  Remote calls are slower than in-process ones, and have to be managed using asynchronous for example.  Remote calls can also fail at anytime, so you have to design for failure.  Generally speaking, your developers have to have reached a certain level of skill and maturity before they should attempt to build a microservices system.
+  Because the micro-services become a distributed system, the code inherit some complexities.  Remote calls are slower than in-process ones, and have to be managed using asynchronous for example.  Remote calls can also fail at any time, so you have to design for failure.  Generally speaking, your developers have to have reached a certain level of skill and maturity before they should attempt to build a micro-services system.
 
 <figure class="image">
   <img src="premium.png" alt="include.description">
@@ -51,7 +51,7 @@ There is a price to pay however, that must be managed:
 
 *  **Eventual Consistency**
 
-   >"Microservices introduce eventual consistency issues because of their laudable insistence on decentralized data management. With a monolith, you can update a bunch of things together in a single transaction. Microservices require multiple resources to update, and distributed transactions are frowned on (for good reason). So now, developers need to be aware of consistency issues, and figure out how to detect when things are out of sync before doing anything the code will regret."
+   >"Micro-services introduce eventual consistency issues because of their laudable insistence on decentralized data management. With a monolith, you can update a bunch of things together in a single transaction. Micro-services require multiple resources to update, and distributed transactions are frowned on (for good reason). So now, developers need to be aware of consistency issues, and figure out how to detect when things are out of sync before doing anything the code will regret."
    >
    > <cite>-- Martin Fowler</cite>
 </div>
@@ -60,13 +60,13 @@ There is a price to pay however, that must be managed:
 
 * **HTTP(s) + REST**
 
-  The combination of HTTP and REST was chosen for the majority of communications because HTTP is the widely accepted and defacto standard of communication on the internet.  It's use along with the REST design pattern and JSON serialization, provides a method that is easy to implement, takes advantage of the standard HTTP verbs, widely known, scalable and also platform independent.  Several tools to generate human and machine readable documentation for REST APIs are available, such as OpenAPI.
+  The combination of HTTP and REST was chosen for the majority of communications because HTTP is the widely accepted and de-facto standard of communication on the internet.  It's use along with the REST design pattern and JSON serialization, provides a method that is easy to implement, takes advantage of the standard HTTP verbs, widely known, scalable and also platform independent.  Several tools to generate human and machine readable documentation for REST APIs are available, such as OpenAPI.
 
 * **gRPC**
 
    While REST is primarily based on HTTP/1, gRPC is a protocol built on top of HTTP/2.  gRPC was chosen for:
 
-  * Charging Points to connect to their status service due to the fact that it is more efficient than normal HTTP and REST, in it's use of protobuf for serialization and contract based communication (which is less resource demanding and therefore can be used in low power IoT devices).  It also allows the charging points to take adavantage of HTTP/2 and stream their current status to the service on the same consistent connection, unlike REST which would require a new connection to be negotiated everytime an update is to be sent.
+  * Charging Points to connect to their status service due to the fact that it is more efficient than normal HTTP and REST, in it's use of protobuf for serialization and contract based communication (which is less resource demanding and therefore can be used in low power IoT devices).  It also allows the charging points to take advantage of HTTP/2 and stream their current status to the service on the same consistent connection, unlike REST which would require a new connection to be negotiated everytime an update is to be sent.
   
   * For the charging point info and reservation services to read data from the status service.  Because this is internal communication, we do not need to cater to such a wide consumer base as the other REST based services.  We can use gRPC and reap it's performance and efficiency rewards.
 
