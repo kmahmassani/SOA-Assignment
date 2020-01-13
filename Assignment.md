@@ -54,7 +54,6 @@ There is a price to pay however, that must be managed:
    >"Micro-services introduce eventual consistency issues because of their laudable insistence on decentralized data management. With a monolith, you can update a bunch of things together in a single transaction. Micro-services require multiple resources to update, and distributed transactions are frowned on (for good reason). So now, developers need to be aware of consistency issues, and figure out how to detect when things are out of sync before doing anything the code will regret."
    >
    > <cite>-- Martin Fowler</cite>
-</div>
 
 ### 3)
 
@@ -173,8 +172,26 @@ app.use('/graphql', graphqlHTTP({
 
 ### 2)
 
+Identity&nbsp;&nbsp;&nbsp;| Description
+---|---
+CP Owner| The owners of the charging points.  Each owner should be able to manage their own charging points and not be able to access those not owned by them.
+Driver| The drivers of cars that have access the system through the mobile app.  They should be able to manage their reservations and only query CPs and their locations.
+Car| Similar to the driver identity, except that these might come preconfigured from the factory with the necessary access to the system.
+CP| The physical charging points that connect to the system.  Should only provide data about their current status, and not query any data.
 
+The identities will be managed via XACML3.0 policy based access control.  Each identity type will be added to the identity server along with the rules which govern what they are permitted to see and do.  XACML allows attributes associated with the user to be used as input into the decision of whether a given user may access a given resource.  Offloading this decision to the Identity Server and API gateway, entails separation of enforcement from decision making from definition of the authorization.  This allows the central modification of the policies, and to view and audit them easily.  It also allows the developers to focus on the API's purpose itself, without having to worry about writing code specifically for auth.
+
+The API gateway plays an integral part in this process, it makes sure all traffic is properly authenticated and authorized before directing traffic to the underlying services.
+
+![Auth](auth.png)
+
+In the above diagram, first the client authenticates with the identity server using OAuth2.  Upon authentication, the identity server then provides the client with an access token which he then includes with all requests to other services.  The requests are intercepted by the API manager, which then sends the token back to the identity service.  The token is verified and access control is queried via the XACML store.  A JSON Web Token is returned to the API Gateway which then embeds it with the requests to the destination service.  In this way, we achieve separation of concerns, with the API Manager/Gateway handling enforcement, the Identity Service handling decision making and the only burden which the micro-services handle is the verification of the JWT.
+
+</div>
 
 https://martinfowler.com/articles/microservice-trade-offs.html
 https://skelia.com/articles/5-major-benefits-microservice-architecture/
 https://nordicapis.com/when-to-use-what-rest-graphql-webhooks-grpc/
+https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/microservices/aks
+https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/implement-api-gateways-with-ocelot
+https://en.wikipedia.org/wiki/XACML
