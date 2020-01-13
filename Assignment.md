@@ -164,6 +164,17 @@ app.use('/graphql', graphqlHTTP({
 ![Request3](request3.png)
 ![Request4](request4.png)
 
+
+## Part C
+
+### 1)
+
+![DeploymentDiagram](DeploymentArchitecture.png)
+
+### 2)
+
+
+
 https://martinfowler.com/articles/microservice-trade-offs.html
 https://skelia.com/articles/5-major-benefits-microservice-architecture/
 https://nordicapis.com/when-to-use-what-rest-graphql-webhooks-grpc/
