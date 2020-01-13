@@ -1,5 +1,6 @@
-#SOA Assignment - 2019
-## Kamal Mahmassani
+# SOA Assignment - 2019 - Kamal Mahmassani
+
+*An online version of this document can be found at https://github.com/kmahmassani/SOA-Assignment/blob/master/Assignment.md*
 
 <div style="text-align: justify">
 
