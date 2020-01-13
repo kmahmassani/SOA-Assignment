@@ -1,3 +1,6 @@
+#SOA Assignment - 2019
+## Kamal Mahmassani
+
 <div style="text-align: justify">
 
 ## Part A
